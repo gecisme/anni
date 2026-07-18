@@ -1,11 +1,9 @@
-// CONFIG ẢNH CARD
 const imgCardBack = "card-back.png"; 
 const imgCardTypes = {
   theMoon: "the-moon.png",
   theSun: "the-sun.png"
 };
 
-// ĐỒNG BỘ BADGE STEAM
 const flipAchievements = {
   sad: {
     key: 'sadCatFound',
@@ -21,13 +19,11 @@ const flipAchievements = {
   }
 };
 
-// STATE LẬT BÀI
 let currentRound = 0; 
 const totalRounds = 6; 
 let missCount = 0; 
 let canClickCard = false; 
 
-// DOM ELEMENTS
 const screenFlipCard = document.getElementById("screen-game-flipcard");
 const roundTitleEl = document.getElementById("flip-round-title");
 const statusMsgEl = document.getElementById("flip-status-msg");
@@ -58,7 +54,6 @@ function setupRound() {
   }
 }
 
-// XỬ LÝ CLICK CARD
 cards.forEach(card => {
   card.addEventListener("click", () => {
     if (!canClickCard || card.classList.contains("flipped")) return;
@@ -67,7 +62,6 @@ cards.forEach(card => {
     cardsContainerEl.classList.add("disabled-clicks"); 
 
     let resultImgSrc = "";
-    // V0: Random | V1-3: Moon (Hụt) | V4-6: Sun (Trúng)
     if (currentRound === 0) {
       resultImgSrc = (Math.random() > 0.5) ? imgCardTypes.theMoon : imgCardTypes.theSun;
     } else if (currentRound <= 3) {
@@ -90,18 +84,11 @@ function handlePostFlipResults(resultImgSrc) {
       if (missCount >= 3) triggerFlipAchievement(flipAchievements.sad);
       setTimeout(handleRoundTransition, 1500);
     } else {
-      statusMsgEl.textContent = "Congrats! Cậu giỏi quá!";
+      statusMsgEl.textContent = "Congrats!";
       if (currentRound > 3) {
         triggerFlipAchievement(flipAchievements.pro);
-        setTimeout(() => {
-          statusMsgEl.textContent = "Nhấn vào lá bài THE SUN vừa lật để xem thư nha ❤️";
-          canClickCard = true;
-          const flippedCard = document.querySelector(".card.flipped");
-          if (flippedCard) {
-            flippedCard.style.pointerEvents = "auto";
-            flippedCard.addEventListener("click", goToLetterScreen, { once: true });
-          }
-        }, 1500);
+        // hết vòng 6 -> quay về màn đèn pin để tìm lá thư đặc biệt
+        setTimeout(returnToFlashlightScreen, 1500);
       } else {
         setTimeout(handleRoundTransition, 1500);
       }
@@ -117,10 +104,15 @@ function handleRoundTransition() {
   }
 }
 
-function goToLetterScreen(e) {
-  e.stopPropagation(); 
-  const screenLetter = document.getElementById("screen-letter"); 
-  if (screenLetter) transitionToScreen(screenFlipCard, screenLetter);
+// quay về màn đèn pin và kích hoạt kiểm tra hiện lá thư
+function returnToFlashlightScreen() {
+  const screenGameFlashlight = document.getElementById("screen-game-flashlight");
+  if (screenGameFlashlight && typeof transitionToScreen === 'function') {
+    isFlipGameDone = true; 
+    transitionToScreen(screenFlipCard, screenGameFlashlight);
+    if (typeof initFlashlightGame === 'function') initFlashlightGame();
+    if (typeof checkAndSpawnLetter === 'function') checkAndSpawnLetter();
+  }
 }
 
 function triggerFlipAchievement(achData) {

@@ -50,12 +50,15 @@
     <div class="game-item" id="item-star" data-name="Brightest Star" data-desc="Anh luôn là ngôi sao sáng nhất dẫn đường cho em vượt qua mọi bão giông.">
       <img src="star-item.png" alt="Star">
     </div>
-    <div class="game-item" id="item-letter" data-name="A Letter For You" data-desc="Như mọi lần, luôn có thư ><">
-      <img src="letter-item.png" alt="Letter Item">
-    </div>
-    <!-- lá bài này kh cần data vì không hiện achievement nha -->
+    
+    <!-- lá bài kích hoạt game lật bài, kh hiện achievement -->
     <div class="game-item" id="item-card">
-      <img src="card-item.png" alt="Card Item">
+      <img src="card-item.png" alt="Card">
+    </div>
+
+    <!-- lá thư bí mật mặc định ẩn, chỉ hiện ở cuối cùng -->
+    <div class="game-item hidden" id="item-letter" data-name="A Letter For You" data-desc="Như mọi lần, luôn có thư ><">
+      <img src="letter-item.png" alt="Letter">
     </div>
 
     <div id="continue-hint" class="hidden">Ấn vào đâu đó để tiếp tục</div>
@@ -63,17 +66,16 @@
 
   <!-- scr 5: game lật bài -->
   <section id="screen-game-flipcard" class="screen flex-center hidden">
-    <!-- khung rule lồng bên trong -->
     <div id="flipcard-rule-box" class="rule-box">
-      <h2>Notice!</h2>
-      <p> Cơ chế vẫn rất đơn giản. 100% vận may, sẽ có 3 lá bài, 2 lá <strong>The Moon</strong> và 1 lá anh cần tìm là <strong>The Sun</strong>. Goodluck bbi</p>
-      <button id="btn-start-flipcard" class="btn-pastel">Play</button>
+      <h2>Flip Card Rule</h2>
+      <p>Lets go gambling! Hãy thử vận may của bồ bằng cách chọn 1 trong 3 lá bài nhaaa.</p>
+      <button id="btn-start-flipcard" class="btn-pastel">Chơi luôn</button>
     </div>
 
     <div class="flipcard-wrapper hidden" id="flipcard-content">
       <div class="game-header">
-        <h2 id="flip-round-title">Vòng Nháp</h2>
-        <div id="flip-status-msg">Lets go gambling, choose one</div>
+        <h2 id="flip-round-title">Vòng Mẫu (Chơi thử nha)</h2>
+        <div id="flip-status-msg">Hãy chọn 1 trong 3 lá bài bên dưới!</div>
       </div>
       
       <div class="cards-container">
@@ -134,6 +136,9 @@
       <span class="achievement-desc" id="ach-desc">Mô tả</span>
     </div>
   </div>
+
+  <!-- màng trắng dùng cho hiệu ứng chuyển cảnh lá thư trắng xóa -->
+  <div id="white-flash-overlay" class="hidden"></div>
 
   <script src="game-flipcard.js"></script>
   <script src="main.js"></script>

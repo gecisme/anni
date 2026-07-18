@@ -1,20 +1,19 @@
-// DỮ LIỆU THOẠI
 const introDialogue = ["A Nhonn welcome, this web created by ur gf", "Em mong là anh có trải nghiệm tốt với những thứ sắp tới", "Lets go, enjoy it, i love you <3"];
 const outroDialogue = ["Happi our anniversary", "Cảm ơn anh đã yêu emm", "Em yêu anh."];
 
-// STATE CHUNG
 let currentIntroIndex = 0;
 let currentOutroIndex = 0;
 let isTyping = false;
 let typingTimeout = null;
 let flashlightTimer = null; 
 
-// DOM ELEMENTS
 const screenIntro = document.getElementById("screen-intro");
 const screenRule = document.getElementById("screen-rule");
 const screenLoading = document.getElementById("screen-loading");
 const screenGameFlashlight = document.getElementById("screen-game-flashlight");
 const screenGameFlipcard = document.getElementById("screen-game-flipcard");
+const flipcardRuleBox = document.getElementById("flipcard-rule-box");
+const flipcardContent = document.getElementById("flipcard-content");
 const screenLetter = document.getElementById("screen-letter");
 const screenOutro = document.getElementById("screen-outro");
 
@@ -24,9 +23,9 @@ const outroTextEl = document.getElementById("outro-text");
 const outroHintEl = document.getElementById("outro-hint");
 
 const btnPlay = document.getElementById("btn-play");
+const btnStartFlipcard = document.getElementById("btn-start-flipcard");
 const btnCloseLetter = document.getElementById("btn-close-letter");
 
-// EFFECT GÕ CHỮ
 function typeSentence(element, text, hintElement) {
   element.textContent = "";
   isTyping = true;
@@ -54,7 +53,6 @@ function finishTyping(element, text, hintElement) {
   hintElement.classList.remove("hidden");
 }
 
-// CHUYỂN SCREEN
 function transitionToScreen(fromScreen, toScreen) {
   fromScreen.classList.add("hidden");
   setTimeout(() => {
@@ -63,7 +61,6 @@ function transitionToScreen(fromScreen, toScreen) {
   }, 800);
 }
 
-// SCR 1 (INTRO)
 function startIntro() {
   currentIntroIndex = 0;
   typeSentence(introTextEl, introDialogue[0], introHintEl);
@@ -89,7 +86,6 @@ window.addEventListener("keydown", (e) => {
 });
 window.addEventListener("DOMContentLoaded", startIntro);
 
-// SCR 2 (RULE) -> SCR 3 (LOAD) -> SCR 4 (GAME)
 btnPlay.addEventListener("click", () => {
   transitionToScreen(screenRule, screenLoading);
   setTimeout(() => {
@@ -98,7 +94,6 @@ btnPlay.addEventListener("click", () => {
   }, 3000);
 });
 
-// SCR 4: ĐÈN PIN & STEAM POPUP
 const overlay = document.querySelector(".flashlight-overlay");
 const items = document.querySelectorAll(".game-item");
 const steamPopup = document.getElementById("steam-popup");
@@ -146,6 +141,16 @@ items.forEach(item => {
     item.classList.add("hidden");
     itemsFound++;
 
+    // click trúng lá bài thì đổi màn luôn, kh hiện achievement
+    if (item.id === "item-card") {
+      clearInterval(flashlightTimer); 
+      setTimeout(() => {
+        transitionToScreen(screenGameFlashlight, screenGameFlipcard);
+      }, 500);
+      return; 
+    }
+
+    // các món khác hiện achievement bình thường
     const name = item.getAttribute("data-name");
     const desc = item.getAttribute("data-desc");
     const imgSrc = item.querySelector("img").getAttribute("src");
@@ -169,12 +174,7 @@ function hideSteamAchievement() {
   if (itemsFound >= totalItems) {
     clearInterval(flashlightTimer); 
     setTimeout(() => {
-      if (screenGameFlipcard) {
-        transitionToScreen(screenGameFlashlight, screenGameFlipcard);
-        if (typeof initFlipCardGame === 'function') initFlipCardGame();
-      } else {
-        transitionToScreen(screenGameFlashlight, screenOutro);
-      }
+      transitionToScreen(screenGameFlashlight, screenGameFlipcard);
     }, 800);
   }
 }
@@ -183,14 +183,21 @@ screenGameFlashlight.addEventListener("click", () => {
   if (isPopupActive) hideSteamAchievement();
 });
 
-// SCR 6 (THƯ) -> OUTRO
+// nhấn nút để ẩn rule lật bài và bắt đầu chơi
+if (btnStartFlipcard) {
+  btnStartFlipcard.addEventListener("click", () => {
+    flipcardRuleBox.classList.add("hidden");
+    flipcardContent.classList.remove("hidden");
+    if (typeof initFlipCardGame === 'function') initFlipCardGame();
+  });
+}
+
 if (btnCloseLetter) {
   btnCloseLetter.addEventListener("click", () => {
     transitionToScreen(screenLetter, screenOutro);
   });
 }
 
-// SCR 7 (OUTRO)
 function startOutro() {
   currentOutroIndex = 0;
   typeSentence(outroTextEl, outroDialogue[0], outroHintEl);

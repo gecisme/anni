@@ -1,5 +1,5 @@
 const introDialogue = ["A Nhonn welcome, this web created by ur gf", "Em mong là anh có trải nghiệm tốt với những thứ sắp tới", "Lets go, enjoy it, i love you <3"];
-const outroDialogue = ["Happi our anniversary", "Cảm ơn anh đã yêu emm", "Em yêu anh."];
+const outroDialogue = ["Happi our anniversary", "Cảm ơn anh đã yêu emm", "Em yêu anh rất nhiều."];
 
 let currentIntroIndex = 0;
 let currentOutroIndex = 0;
@@ -16,6 +16,7 @@ const flipcardRuleBox = document.getElementById("flipcard-rule-box");
 const flipcardContent = document.getElementById("flipcard-content");
 const screenLetter = document.getElementById("screen-letter");
 const screenOutro = document.getElementById("screen-outro");
+const whiteOverlay = document.getElementById("white-flash-overlay");
 
 const introTextEl = document.getElementById("intro-text");
 const introHintEl = document.getElementById("intro-hint");
@@ -101,9 +102,9 @@ const achImg = document.getElementById("ach-img");
 const achName = document.getElementById("ach-name");
 const achDesc = document.getElementById("ach-desc");
 
-let itemsFound = 0;
-let totalItems = items.length;
+let itemsFoundCount = 0; 
 let isPopupActive = false;
+let isFlipGameDone = false; 
 
 screenGameFlashlight.addEventListener("mousemove", (e) => {
   const rect = screenGameFlashlight.getBoundingClientRect();
@@ -114,7 +115,6 @@ screenGameFlashlight.addEventListener("mousemove", (e) => {
 });
 
 function initFlashlightGame() {
-  itemsFound = 0;
   randomizeItemPositions();
   if (flashlightTimer) clearInterval(flashlightTimer);
   flashlightTimer = setInterval(() => {
@@ -139,9 +139,8 @@ items.forEach(item => {
     if (isPopupActive) return; 
     
     item.classList.add("hidden");
-    itemsFound++;
 
-    // click trúng lá bài thì đổi màn luôn, kh hiện achievement
+    // 1. nếu click trúng lá bài -> đi chơi lật bài
     if (item.id === "item-card") {
       clearInterval(flashlightTimer); 
       setTimeout(() => {
@@ -150,7 +149,23 @@ items.forEach(item => {
       return; 
     }
 
-    // các món khác hiện achievement bình thường
+    // 2. nếu click trúng lá thư -> hiệu ứng trắng xóa rồi chuyển scr đọc thư
+    if (item.id === "item-letter") {
+      clearInterval(flashlightTimer);
+      whiteOverlay.classList.remove("hidden");
+      setTimeout(() => whiteOverlay.classList.add("active"), 10);
+      
+      setTimeout(() => {
+        screenGameFlashlight.classList.add("hidden");
+        screenLetter.classList.remove("hidden");
+        whiteOverlay.classList.remove("active");
+        setTimeout(() => whiteOverlay.classList.add("hidden"), 800);
+      }, 900);
+      return;
+    }
+
+    // 3. các item thường nổ achievement
+    itemsFoundCount++;
     const name = item.getAttribute("data-name");
     const desc = item.getAttribute("data-desc");
     const imgSrc = item.querySelector("img").getAttribute("src");
@@ -170,12 +185,20 @@ function showSteamAchievement(name, desc, imgSrc) {
 function hideSteamAchievement() {
   steamPopup.classList.remove("show");
   isPopupActive = false;
+  checkAndSpawnLetter();
+}
 
-  if (itemsFound >= totalItems) {
-    clearInterval(flashlightTimer); 
-    setTimeout(() => {
-      transitionToScreen(screenGameFlashlight, screenGameFlipcard);
-    }, 800);
+// hàm kiểm tra điều kiện xuất hiện lá thư ở cuối cùng
+function checkAndSpawnLetter() {
+  if (itemsFoundCount >= 5 && isFlipGameDone) {
+    const letterItem = document.getElementById("item-letter");
+    if (letterItem && letterItem.classList.contains("hidden")) {
+      letterItem.classList.remove("hidden");
+      const randomX = Math.floor(Math.random() * 75) + 10;
+      const randomY = Math.floor(Math.random() * 75) + 10;
+      letterItem.style.left = `${randomX}%`;
+      letterItem.style.top = `${randomY}%`;
+    }
   }
 }
 
@@ -183,7 +206,6 @@ screenGameFlashlight.addEventListener("click", () => {
   if (isPopupActive) hideSteamAchievement();
 });
 
-// nhấn nút để ẩn rule lật bài và bắt đầu chơi
 if (btnStartFlipcard) {
   btnStartFlipcard.addEventListener("click", () => {
     flipcardRuleBox.classList.add("hidden");

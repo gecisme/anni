@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our 2nd Anniversary</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SCR 1: INTRO -->
+  <section id="screen-intro" class="screen flex-center">
+    <div class="chat-bubble-container">
+      <div class="typewriter-text" id="intro-text"></div>
+    </div>
+    <div id="intro-hint" class="press-any-key blink hidden">Press any button to continue</div>
+  </section>
+
+  <!-- SCR 2: RULE -->
+  <section id="screen-rule" class="screen flex-center hidden">
+    <div class="rule-box">
+      <h2>How To Play?</h2>
+      <p>A nhonnn,cơ chế cái này khá đơn giản. Anh chỉ cần tìm những thứ em giấu đi là xong. Không có giới hạn thời gian, chỉ là mini game em làm tặng anh thuii. Hope u enjoy it!</p>
+      <button id="btn-play" class="btn-pastel">Go Goo</button>
+    </div>
+  </section>
+
+  <!-- SCR 3: LOADING -->
+  <section id="screen-loading" class="screen flex-center hidden">
+    <div class="loading-animation">...</div>
+    <p>Đợi xíuu đang giấu đồ....</p>
+  </section>
+
+  <!-- SCR 4: GAME ĐÈN PIN (7 ITEMS) -->
+  <section id="screen-game-flashlight" class="screen hidden">
+    <div class="flashlight-overlay"></div>
+    
+    <div class="game-item" id="item-bear" data-name="Bear With Me" data-desc="Cảm ơn anh đã luôn ở bên em, sau rất nhiều thứ không vui.">
+      <img src="bear-item.png" alt="Bear">
+    </div>
+    <div class="game-item" id="item-clover" data-name="Worth Every Bit of Luck" data-desc="Em có lẽ đã dùng hết may mắn đời mình để gặp được anh, và em biết ơn điều đó.">
+      <img src="clover-item.png" alt="Clover">
+    </div>
+    <div class="game-item" id="item-bouquet" data-name="Love Flowers and Love You" data-desc="Cảm ơn anh vì đã chọn em được đồng hành cùng anh, và mong sắp tới có ra sao thì hãy nghĩ đến em đầu tiên nha.">
+      <img src="bouquet-item.png" alt="Bouquet">
+    </div>
+    <div class="game-item" id="item-sun-cat" data-name="You Are My Sunshine" data-desc="Even on cloudy days. Những ngày có anh, đều là những ngày trời rất đẹp đối với em.">
+      <img src="sun-cat-item.png" alt="Sun Cat">
+    </div>
+    <div class="game-item" id="item-star" data-name="Brightest Star" data-desc="Anh luôn là ngôi sao sáng nhất dẫn đường cho em vượt qua mọi bão giông.">
+      <img src="star-item.png" alt="Star">
+    </div>
+    <div class="game-item" id="item-letter" data-name="A Letter For You" data-desc="Như mọi lần, luôn có thư ><">
+      <img src="letter-item.png" alt="Letter Item">
+    </div>
+    <div class="game-item" id="item-card" data-name="Written In The Stars" data-desc="Dù có thế nào, có ra sao em vẫn muốn được ở cạnh anh. Vì anh luôn là người rất quan trọng với em.">
+      <img src="card-item.png" alt="Card Item">
+    </div>
+
+    <div id="continue-hint" class="hidden">Ấn vào đâu đó để tiếp tục</div>
+  </section>
+
+  <!-- SCR 5: GAME LẬT BÀI -->
+  <section id="screen-game-flipcard" class="screen flex-center hidden">
+    <div class="flipcard-wrapper">
+      <div class="game-header">
+        <h2 id="flip-round-title">Vòng Nháp</h2>
+        <div id="flip-status-msg">Lets go gambling, choose one</div>
+      </div>
+      
+      <div class="cards-container">
+        <div class="card" data-index="0">
+          <div class="card-inner">
+            <div class="card-front"><img src="card-back.png" alt="Back"></div>
+            <div class="card-back"><img src="" alt="Front" class="card-front-img"></div>
+          </div>
+        </div>
+        <div class="card" data-index="1">
+          <div class="card-inner">
+            <div class="card-front"><img src="card-back.png" alt="Back"></div>
+            <div class="card-back"><img src="" alt="Front" class="card-front-img"></div>
+          </div>
+        </div>
+        <div class="card" data-index="2">
+          <div class="card-inner">
+            <div class="card-front"><img src="card-back.png" alt="Back"></div>
+            <div class="card-back"><img src="" alt="Front" class="card-front-img"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCR 6: ĐỌC THƯ -->
+  <section id="screen-letter" class="screen flex-center hidden">
+    <img src="sticker1.png" alt="Sticker" class="decor-sticker sticker-left">
+    <img src="sticker2.png" alt="Sticker" class="decor-sticker sticker-right">
+
+    <div class="letter-container">
+      <div class="letter-content-box">
+        <p class="letter-text">
+           Dear my boyfriend<br><br>
+          Em thấy rất vui vì mình đã gặp được nhau, để em có thể làm 1 phần trong cuộc sống của anh. <br>
+          Thời gian có thể sẽ hơn, nhma cứ tính từ mốc ngày 19 đi hee, em yêu anh nhiều, happi our anniversary, 2 happi months.<br><br>
+          Đã trải qua cũng kha khá thứ, em vẫn yêu anh dù có ra sao đi nữa, mong tụi mình vẫn mãi yêu nhau. Em yêu anh nhiều lắmm ><
+        </p>
+      </div>
+      <button id="btn-close-letter" class="btn-dark-blue">Press &gt;&lt;</button>
+    </div>
+  </section>
+
+  <!-- SCR 7: OUTRO -->
+  <section id="screen-outro" class="screen flex-center hidden">
+    <div class="chat-bubble-container">
+      <div class="typewriter-text" id="outro-text"></div>
+    </div>
+    <div id="outro-hint" class="press-any-key blink hidden">Press any button to replay</div>
+  </section>
+
+  <!-- STEAM POPUP CHUNG -->
+  <div class="steam-achievement" id="steam-popup">
+    <div class="achievement-icon"><img id="ach-img" src="" alt="Badge"></div>
+    <div class="achievement-content">
+      <span class="achievement-title">Congrats! Unlocked Achievement</span>
+      <span class="achievement-name" id="ach-name">Tên</span>
+      <span class="achievement-desc" id="ach-desc">Mô tả</span>
+    </div>
+  </div>
+
+  <script src="game-flipcard.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
-const introDialogue = ["A Nhonn welcome, this web created by ur gf", "Em mong là anh có trải nghiệm tốt với những thứ sắp tới", "Lets go, enjoy it, i love you <3"];
-const outroDialogue = ["Happi our anniversary", "Cảm ơn anh đã yêu emm", "Em yêu anh rất nhiều."];
+const introDialogue = ["a nhonn welcome, this web created by ur gf", "em mong là anh có trải nghiệm tốt với những thứ sắp tới", "lets go, enjoy it, i love you <3"];
+const outroDialogue = ["happi our anniversary", "cảm ơn anh đã yêu emm", "em yêu anh rất nhiều."];
 
 let currentIntroIndex = 0;
 let currentOutroIndex = 0;
@@ -82,9 +82,6 @@ function handleIntroInteraction() {
 }
 
 screenIntro.addEventListener("click", handleIntroInteraction);
-window.addEventListener("keydown", (e) => {
-  if (!screenIntro.classList.contains("hidden")) handleIntroInteraction();
-});
 window.addEventListener("DOMContentLoaded", startIntro);
 
 btnPlay.addEventListener("click", () => {
@@ -104,7 +101,7 @@ const achDesc = document.getElementById("ach-desc");
 
 let itemsFoundCount = 0; 
 let isPopupActive = false;
-let isFlipGameDone = false; 
+window.isFlipGameDone = false; 
 
 screenGameFlashlight.addEventListener("mousemove", (e) => {
   const rect = screenGameFlashlight.getBoundingClientRect();
@@ -140,7 +137,6 @@ items.forEach(item => {
     
     item.classList.add("hidden");
 
-    // 1. nếu click trúng lá bài -> đi chơi lật bài
     if (item.id === "item-card") {
       clearInterval(flashlightTimer); 
       setTimeout(() => {
@@ -149,7 +145,6 @@ items.forEach(item => {
       return; 
     }
 
-    // 2. nếu click trúng lá thư -> hiệu ứng trắng xóa rồi chuyển scr đọc thư
     if (item.id === "item-letter") {
       clearInterval(flashlightTimer);
       whiteOverlay.classList.remove("hidden");
@@ -164,7 +159,6 @@ items.forEach(item => {
       return;
     }
 
-    // 3. các item thường nổ achievement
     itemsFoundCount++;
     const name = item.getAttribute("data-name");
     const desc = item.getAttribute("data-desc");
@@ -188,9 +182,8 @@ function hideSteamAchievement() {
   checkAndSpawnLetter();
 }
 
-// hàm kiểm tra điều kiện xuất hiện lá thư ở cuối cùng
 function checkAndSpawnLetter() {
-  if (itemsFoundCount >= 5 && isFlipGameDone) {
+  if (itemsFoundCount >= 5 && window.isFlipGameDone) {
     const letterItem = document.getElementById("item-letter");
     if (letterItem && letterItem.classList.contains("hidden")) {
       letterItem.classList.remove("hidden");
@@ -240,6 +233,3 @@ function handleOutroInteraction() {
 }
 
 screenOutro.addEventListener("click", handleOutroInteraction);
-window.addEventListener("keydown", (e) => {
-  if (!screenOutro.classList.contains("hidden")) handleOutroInteraction();
-});

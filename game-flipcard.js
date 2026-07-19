@@ -7,14 +7,14 @@ const imgCardTypes = {
 const flipAchievements = {
   sad: {
     key: 'sadCatFound',
-    name: "Đâu Có Gì Là Suôn Sẻ",
-    desc: "Cố lên, biết đâu lần sau lại được, chỉ cần cố thêm chút thì không gì là không thể.",
+    name: "đâu có gì là suôn sẻ",
+    desc: "cố lên, biết đâu lần sau lại được, chỉ cần cố thêm chút thì không gì là không thể.",
     img: "the-moon.png" 
   },
   pro: {
     key: 'sunMoonFound',
-    name: "Bồ Em Dỏi Vậy Taa",
-    desc: "Nếu như tình mình có những thứ không như ý anh, em sẽ giúp anh làm mọi thứ thuận lợi hơn.",
+    name: "bồ em dỏi vậy taa",
+    desc: "nếu như tình mình có những thứ không như ý anh, em sẽ giúp anh làm mọi thứ thuận lợi hơn.",
     img: "the-sun.png" 
   }
 };
@@ -46,11 +46,11 @@ function setupRound() {
   });
 
   if (currentRound === 0) {
-    roundTitleEl.textContent = "Vòng Mẫu (Chơi thử nha)";
-    statusMsgEl.textContent = "Hãy chọn 1 trong 3 lá bài bên dưới!";
+    roundTitleEl.textContent = "vòng mẫu (chơi thử nha)";
+    statusMsgEl.textContent = "hãy chọn 1 trong 3 lá bài bên dưới!";
   } else {
-    roundTitleEl.textContent = `Vòng Chính Thức ${currentRound} / ${totalRounds}`;
-    statusMsgEl.textContent = currentRound <= 3 ? "Cố thêm chút nữa xem sao..." : "Húu hú, sắp được rùi nà!";
+    roundTitleEl.textContent = `vòng chính thức ${currentRound} / ${totalRounds}`;
+    statusMsgEl.textContent = currentRound <= 3 ? "cố thêm chút nữa xem sao..." : "húu hú, sắp được rùi nà!";
   }
 }
 
@@ -80,14 +80,13 @@ cards.forEach(card => {
 function handlePostFlipResults(resultImgSrc) {
   setTimeout(() => {
     if (resultImgSrc === imgCardTypes.theMoon) {
-      statusMsgEl.textContent = "Hụt mất rùi, cố lênn ><";
+      statusMsgEl.textContent = "hụt mất rùi, cố lênn ><";
       if (missCount >= 3) triggerFlipAchievement(flipAchievements.sad);
       setTimeout(handleRoundTransition, 1500);
     } else {
-      statusMsgEl.textContent = "Congrats!";
+      statusMsgEl.textContent = "congrats!";
       if (currentRound > 3) {
         triggerFlipAchievement(flipAchievements.pro);
-        // hết vòng 6 -> quay về màn đèn pin để tìm lá thư đặc biệt
         setTimeout(returnToFlashlightScreen, 1500);
       } else {
         setTimeout(handleRoundTransition, 1500);
@@ -104,11 +103,10 @@ function handleRoundTransition() {
   }
 }
 
-// quay về màn đèn pin và kích hoạt kiểm tra hiện lá thư
 function returnToFlashlightScreen() {
   const screenGameFlashlight = document.getElementById("screen-game-flashlight");
   if (screenGameFlashlight && typeof transitionToScreen === 'function') {
-    isFlipGameDone = true; 
+    window.isFlipGameDone = true; 
     transitionToScreen(screenFlipCard, screenGameFlashlight);
     if (typeof initFlashlightGame === 'function') initFlashlightGame();
     if (typeof checkAndSpawnLetter === 'function') checkAndSpawnLetter();
@@ -116,8 +114,8 @@ function returnToFlashlightScreen() {
 }
 
 function triggerFlipAchievement(achData) {
-  if (localStorage.getItem(achData.key)) return;
-  localStorage.setItem(achData.key, 'unlocked');
+  if (window.GameStorage && window.GameStorage.isUnlocked(achData.key)) return;
+  if (window.GameStorage) window.GameStorage.unlock(achData.key);
   if (typeof showSteamAchievement === 'function') {
     showSteamAchievement(achData.name, achData.desc, achData.img);
   }
